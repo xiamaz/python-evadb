@@ -1,0 +1,4 @@
+requests=2.24
+loguru
+html5lib
+requests-cache
