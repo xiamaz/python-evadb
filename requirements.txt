@@ -3,3 +3,4 @@ loguru
 html5lib
 requests-cache
 pytest
+requests-mock
