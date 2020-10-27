@@ -1,0 +1,96 @@
+
+	<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    	"http://www.w3.org/TR/html4/loose.dtd">
+	<html>
+	<head>
+	<title>EVAdb</title>
+	
+	
+<link rel="stylesheet" type="text/css" href="/DataTables-1.10.22/datatables.min.css">
+<script type="text/javascript" src="/DataTables-1.10.22/datatables.min.js"></script>
+
+<link rel="stylesheet" href="/DataTables-1.10.22/jquery.contextMenu.min.css">
+<script src="/DataTables-1.10.22/jquery.contextMenu.min.js"></script>
+<script src="/DataTables-1.10.22/jquery.ui.position.js"></script>
+
+<link rel="stylesheet" href="/EVAdb/cal/calendar.css">
+<script language="JavaScript" src="/EVAdb/cal/calendar_db.js"></script>
+
+<meta name="viewport" content="width=device-width, height=device-height,  initial-scale=1, minimum-scale=1">
+<link rel="stylesheet" type="text/css" href="/EVAdb/evadb/EVAdbtest.css">
+<script type="text/javascript" src="/EVAdb/evadb/EVAdbtest.js"></script>
+</head>
+<body bgcolor="#CCCCCC">
+<div id="wrapper"><div id="content">
+  <div id="mySidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <div class="subnav">Sample searches</div>
+  <a href="searchStat.pl">Samples with quality</a>
+  <a href="searchSample.pl">Samples</a>
+  <div class="subnav">Variant searches</div>
+  <a href="search.pl">Autosomal dominant</a>
+  <a href="searchGeneInd.pl">Autosmal recessive</a>
+  <a href="searchTrio.pl">De novo trio</a>
+  <a href="searchDiseaseGene.pl">Disease panels</a>
+  <a href="searchGene.pl">Genes</a>
+  <a href="searchHGMD.pl">ClinVar/HGMD</a>
+  <a href="searchOmim.pl">OMIM</a>
+  <a href="searchHPO.pl">HPO</a>
+  <a href="searchTumor.pl">Tumor/Controls</a>
+  <a href="searchSameVariant.pl">Same Variant</a>
+  <a href="searchPosition.pl">Region</a>
+  <div class="subnav">CNV</div>
+  <a href="searchCnv.pl">CNV</a>
+  <div class="subnav">Coverage</div>
+  <a href="searchTranscriptstat.pl">Coverage of genes</a>
+  <a href="searchDiagnostics.pl">Coverage of panels</a>
+  <div class="subnav">Other</div>
+  <a href="searchHomo.pl">Homozygosity</a>
+  <a href="searchIbs.pl">IBS</a>
+  <a href="importHPO.pl">Import HPO</a>
+  <a href="searchVcfTrio.pl">GATK denovo</a>
+  <a href="searchVcf.pl">GATK Mutect2</a>
+
+  <div class="subnav">Annotations/Report</div>
+  <a href="searchComment.pl">Variant annotation</a>
+  <a href="searchConclusion.pl">Case conclusions</a>
+  <a href="report.pl">Report</a>
+
+  <div class="subnav">Mito</div>
+  <a href="searchMito.pl">Mito</a>
+
+  <div class="subnav">Help</div>
+  <a href="help.pl">Help</a>
+  <div class="subnav">Logout</div>
+  <a href="login.pl">Logout</a>
+
+  <div class="subnav">Admin</div>
+  <a href="adminList.pl">List accounts</a>
+  <a href="admin.pl">New account</a>
+
+</div>
+
+<!-- Use any element to open the sidenav -->
+<span style="padding:20px;font-size:24px;cursor:pointer" onclick="openNav()">&#9776; Menu</span>
+
+<!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
+<div id="main">
+
+<font size = 6>Login failed</font><br><br>
+<br><br>
+</div>
+</div>
+<div id="footer">
+<br>
+<div class="footertext ">
+<a href="http://ihg.helmholtz-muenchen.de">Institute of Human Genetics,</a> Helmholtz Zentrum M&uuml;nchen
+<br>
+<a href="http://www.helmholtz-muenchen.de/en/imprint/index.html">Legal</a>
+
+<br><br>
+</div> 
+</div> 
+</div> 
+</body>
+</html>
+
