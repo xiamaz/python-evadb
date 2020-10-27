@@ -7,6 +7,8 @@ evaDB instance, which will be used for individual requests.
 
 Install all python packages in `requirements.txt`. Python 3.8 is required.
 
+Install package locally with `pip install -e .`.
+
 ## Test run
 
 Running `python -m evadb` will test some of the available requests. The
