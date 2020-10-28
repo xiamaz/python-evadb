@@ -1,9 +1,18 @@
-from .evadb_user import EvaDBUser
+import requests_cache
+from evadb.evadb_user import EvaDBUser
 
+# requests_cache.install_cache()
+
+EVADB_USER_HOST = "https://localhost:443/cgi-bin"
 
 print("Doing a test run")
-eva = EvaDBUser().login("TestUser1", "TestUser1")
+# eva = EvaDBUser(EVADB_USER_HOST, "", "")
+eva = EvaDBUser()
+eva._session.verify = False
+eva.login("TestUser1", "TestUser1")
+# eva.login("admin", "admin_pw")
 
+print("Searching normal AD variants")
 variants = eva.search({
     "ds.iddisease":  "312",
     "s.pedigree":    "S0001",
@@ -28,6 +37,7 @@ variants = eva.search({
     "printquery":    "no",
 })
 
+print("Searching samples")
 samples = eva.search_sample({
     "datebegin":       "",
     "dateend":         "",
@@ -41,6 +51,7 @@ samples = eva.search_sample({
     "nottoseq":        "0"
 })
 
+print("Searching normal AR variants")
 ar_variants = eva.search_gene_ind({
     "dg.iddisease":  "312",
     "ds.iddisease":  "",

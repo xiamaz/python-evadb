@@ -1,65 +1,42 @@
 from loguru import logger
 
-import requests
-import requests_cache
-
+from .evadb_shared import require_login, EvaDBBase
 from .table_parser import extract_table
 
-requests_cache.install_cache("evadb")
 
-
-EVADB_URL = "https://ihg4.helmholtz-muenchen.de"
-EVADB_LOGIN_URL = f"{EVADB_URL}/cgi-bin/mysql/snv-vcf/loginDo.pl"
-EVADB_SEARCH_URL = f"{EVADB_URL}/cgi-bin/mysql/snv-vcf/searchDo.pl"
-EVADB_SEARCH_SAMPLE_URL = f"{EVADB_URL}/cgi-bin/mysql/snv-vcf/searchSampleDo.pl"
-EVADB_SEARCH_GENE_IND_URL = f"{EVADB_URL}/cgi-bin/mysql/snv-vcf/searchGeneIndDo.pl"
-
-
-class UnauthorizedException(Exception):
-    pass
-
-
-def require_login(fn):
-    """Enforce that a given function will only execute if properly logged in.
-
-    Otherwise raise an unauthorized error.
-    """
-    def wrapped(self, *args, **kwargs):
-        if not self.logged_in:
-            raise UnauthorizedException()
-        return fn(self, *args, **kwargs)
-    return wrapped
-
-
-def evadb_login(session: "Session", user: str, password: str) -> bool:
+def evadb_login(session: "Session", url: str, user: str, password: str, csrf: str = "", wwwcsrf: str = "") -> bool:
     """Log in as a user into evaDB snv-vcf."""
     data = {
         "name": user,
         "password": password,
         "yubikey": "",
+        "csrf": csrf,
+        "wwwcsrf": wwwcsrf,
     }
-
-    resp = session.post(EVADB_LOGIN_URL, data=data)
+    resp = session.post(url, data=data)
 
     return resp.ok and "Login successful" in resp.text
 
 
-class EvaDBUser:
-    def __init__(self):
-        self._session = requests.Session()
-        self.logged_in = False
-
+class EvaDBUser(EvaDBBase):
     def login(self, user: str, password: str) -> "EvaDBUser":
         """Login as the given user."""
-        self.logged_in = evadb_login(self._session, user, password)
+        csrf_tokens = self._obtain_csrf_token()
+        login_url = self._urls["login_call"]
+
+        self.logged_in = evadb_login(
+            self._session,
+            login_url,
+            user,
+            password,
+            csrf=csrf_tokens["csrf"],
+            wwwcsrf=csrf_tokens["wwwcsrf"])
+
         if not self.logged_in:
             logger.error("Failed to login.")
+        else:
+            logger.info("Successfully logged in.")
         return self
-
-    def _post_form(self, url, data):
-        resp = self._session.post(url, data=data)
-        resp.raise_for_status()
-        return resp.text
 
     @require_login
     def search(self, data: dict) -> list:
@@ -89,7 +66,8 @@ class EvaDBUser:
             "printquery":    "no",
         }
         """
-        text = self._post_form(EVADB_SEARCH_URL, data)
+        search_url = self._urls["search_call"]
+        text = self._post_form(search_url, data)
         table_data = extract_table(text, "//*[@id=\"default\"]")
         return table_data
 
@@ -100,7 +78,8 @@ class EvaDBUser:
         Example data dict: {
         }
         """
-        text = self._post_form(EVADB_SEARCH_GENE_IND_URL, data)
+        gene_ind_url = self._urls["gene_ind_call"]
+        text = self._post_form(gene_ind_url, data)
         table_data = extract_table(text, "(//html:table)[2]")
         return table_data
 
@@ -121,6 +100,7 @@ class EvaDBUser:
             "nottoseq":        "0"
         }
         """
-        text = self._post_form(EVADB_SEARCH_SAMPLE_URL, data)
+        sample_url = self._urls["search_sample_call"]
+        text = self._post_form(sample_url, data)
         table_data = extract_table(text, "//*[@id=\"default\"]")
         return table_data
