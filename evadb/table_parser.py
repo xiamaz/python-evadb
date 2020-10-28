@@ -1,6 +1,10 @@
 import html5lib
 
 
+class ParsingError(Exception):
+    pass
+
+
 def _clean_text(node):
     text = " ".join(node.itertext()).strip()
     return text
@@ -43,7 +47,13 @@ def extract_table(text: str, table_xpath: str) -> list:
     """
     tree = html5lib.parse(text, treebuilder="lxml")
     nss = tree.getroot().nsmap
-    table = tree.xpath(table_xpath, namespaces=nss)[0]
+
+    # try to find a table in the given page
+    try:
+        table = tree.xpath(table_xpath, namespaces=nss)[0]
+    except IndexError as e:
+        raise ParsingError(f"Cannot find table. :::XPath: {table_xpath}:::HTML: {text}") from e
+
     thead, tbody = table
     colnames = [_clean_text(t) for t in thead[0]]
     entries = _extract_table_entries(tbody, colnames)

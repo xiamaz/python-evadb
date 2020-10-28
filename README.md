@@ -9,10 +9,11 @@ Install all python packages in `requirements.txt`. Python 3.8 is required.
 
 Install package locally with `pip install -e .`.
 
-## Test run
+## Examples
 
-Running `python -m evadb` will test some of the available requests. The
-`evadb/__main__.py` also can be used as reference for calling against evaDB.
+`example_calls_user.py` and `example_calls_admin.py` are small scripts that
+contain a sequence of calls against EVAdb. These can be used as reference for
+direct development on top of the requests-based interface.
 
 ## Roadmap
 

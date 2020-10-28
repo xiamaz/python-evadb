@@ -25,15 +25,16 @@ def login_mock(requests_mock):
 
         return login_fail
 
-    requests_mock.post(evadb_user.EVADB_LOGIN_URL, text=text_callback)
+    requests_mock.get("https://localhost/cgi-bin/login.pl", text="")
+    requests_mock.post("https://localhost/cgi-bin/loginDo.pl", text=text_callback)
 
 
 def test_evadb_login_wrong(login_mock):
-    eva = evadb_user.EvaDBUser()
+    eva = evadb_user.EvaDBUser("https://localhost/cgi-bin", "", "")
     eva = eva.login("TestUser1", "TestUser1")
     assert not eva.logged_in
 
 def test_evadb_login_correct(login_mock):
-    eva = evadb_user.EvaDBUser()
+    eva = evadb_user.EvaDBUser("https://localhost/cgi-bin", "", "")
     eva = eva.login("admin", "admin_pw")
     assert eva.logged_in

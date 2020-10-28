@@ -1,3 +1,6 @@
+from collections import namedtuple
+from dataclasses import dataclass
+
 from loguru import logger
 import requests
 
@@ -9,6 +12,9 @@ from .csrf_parser import extract_csrf_tokens
 
 class UnauthorizedException(Exception):
     pass
+
+
+Response = namedtuple("Response", ["error", "data"])
 
 
 def require_login(fn):

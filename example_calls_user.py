@@ -6,11 +6,11 @@ from evadb.evadb_user import EvaDBUser
 EVADB_USER_HOST = "https://localhost:443/cgi-bin"
 
 print("Doing a test run")
-# eva = EvaDBUser(EVADB_USER_HOST, "", "")
-eva = EvaDBUser()
+eva = EvaDBUser(EVADB_USER_HOST, "", "")
+# eva = EvaDBUser()
 eva._session.verify = False
-eva.login("TestUser1", "TestUser1")
-# eva.login("admin", "admin_pw")
+# eva.login("TestUser1", "TestUser1")
+eva.login("admin", "admin_pw")
 
 print("Searching normal AD variants")
 variants = eva.search({
@@ -76,5 +76,7 @@ ar_variants = eva.search_gene_ind({
     "function":      ["unknown", "missense", "nonsense", "stoploss", "splice", "frameshift", "indel"],
     "printquery":    "no",
 })
+
+print(ar_variants)
 
 print(f"Found {len(samples)} samples, {len(variants)} variants, {len(ar_variants)} ar-variants")
