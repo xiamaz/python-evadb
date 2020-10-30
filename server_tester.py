@@ -8,7 +8,7 @@ print(resp.json())
 
 resp = S.post(U + "/login", json={"user": "TestUser1", "password": "TestUser1"})
 
-S.get(U + "/search", json={
+resp = S.get(U + "/search", json={
     "ds.iddisease":  "312",
     "s.pedigree":    "S0001",
     "idproject":     "1",

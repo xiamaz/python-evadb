@@ -2,10 +2,12 @@ from functools import wraps
 
 import uuid
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 import evadb
 
 
 app = Flask(__name__)
+CORS(app)
 sessions = {}
 
 
@@ -50,6 +52,7 @@ def login():
     session_id = generate_session_id()
     eva_inst = evadb.EvaDBUser().login(user=data["user"], password=data["password"])
 
+    # TODO: maybe store session ids instead of a whole requests session
     sessions[session_id] = eva_inst
 
     resp = jsonify({"error": None, "data": {"logged_in": eva_inst.logged_in}})
@@ -65,6 +68,19 @@ def logout():
         del sessions[session_id]
 
     return jsonify({"error": None, "data": None})
+
+
+@app.route("/samples", methods=["GET"])
+@require_login
+def samples():
+    """Search samples."""
+    session = get_session()
+    if session is None:
+        return jsonify({"error": "No session found", "data": None})
+
+    data = request.json
+    result = session.search_sample(data)
+    return jsonify({"error": result.error, "data": result.data})
 
 
 @app.route("/search", methods=["GET"])
