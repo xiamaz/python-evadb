@@ -6,6 +6,18 @@ from .table_parser import extract_table, ParsingError
 
 class EvaDBUser(EvaDBBase):
 
+    def set_session(self, session_id) -> "EvaDBUser":
+        """Set a session id manually. This will set logged_in to true.
+        """
+        self._session.cookies["Exome"] = session_id
+        self.logged_in = True
+        return self
+
+    def get_session(self) -> str:
+        """Get current session id."""
+        session_id = self._session.cookies.get("Exome")
+        return session_id
+
     @require_login
     def search(self, data: dict) -> Response:
         """Search AD variants.
