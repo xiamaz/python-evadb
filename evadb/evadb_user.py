@@ -32,7 +32,7 @@ class EvaDBUser(EvaDBBase):
 
         try:
             table_data = extract_table(text, xpath)
-            logger.debug("Successfully extracted table with {}", xpath)
+            logger.debug("Successfully extracted table for query {} with {}", search_url, xpath)
         except ParsingError as e:
             logger.error("Failed to parse query {} with xpath {}.", search_url, xpath)
             return Response(str(e), None)
