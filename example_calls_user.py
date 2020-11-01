@@ -6,14 +6,14 @@ from evadb.evadb_user import EvaDBUser
 EVADB_USER_HOST = "https://localhost:443/cgi-bin"
 
 print("Doing a test run")
-eva = EvaDBUser(EVADB_USER_HOST, "", "")
-# eva = EvaDBUser()
-eva._session.verify = False
-# eva.login("TestUser1", "TestUser1")
-eva.login("admin", "admin_pw")
+# eva = EvaDBUser(EVADB_USER_HOST, "", "")
+eva = EvaDBUser()
+# eva._session.verify = False
+eva.login("TestUser1", "TestUser1")
+# eva.login("admin", "admin_pw")
 
 print("Searching normal AD variants")
-variants = eva.search({
+variants = eva.search_ad({
     "ds.iddisease":  "312",
     "s.pedigree":    "S0001",
     "idproject":     "1",
@@ -36,6 +36,7 @@ variants = eva.search({
     "showall":       "1",
     "printquery":    "no",
 })
+print(variants.error)
 
 print("Searching samples")
 samples = eva.search_sample({
@@ -50,9 +51,10 @@ samples = eva.search_sample({
     "idproject":       "",
     "nottoseq":        "0"
 })
+print(samples.error)
 
 print("Searching normal AR variants")
-ar_variants = eva.search_gene_ind({
+ar_variants = eva.search_ar({
     "dg.iddisease":  "312",
     "ds.iddisease":  "",
     "s.name":        "S0002",
@@ -76,7 +78,6 @@ ar_variants = eva.search_gene_ind({
     "function":      ["unknown", "missense", "nonsense", "stoploss", "splice", "frameshift", "indel"],
     "printquery":    "no",
 })
+print(ar_variants.error)
 
-print(ar_variants)
-
-print(f"Found {len(samples)} samples, {len(variants)} variants, {len(ar_variants)} ar-variants")
+print(f"Found {len(samples.data)} samples, {len(variants.data)} variants, {len(ar_variants.data)} ar-variants")

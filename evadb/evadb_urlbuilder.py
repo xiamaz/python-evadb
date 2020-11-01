@@ -1,12 +1,15 @@
 EVADB_SHARED_PAGES = {
-    "login_page": "/login.pl",
 }
 
 EVADB_USER_PAGES = {
+    "login_page": "/login.pl",
     "login_call": "/loginDo.pl",
-    "search_call": "/searchDo.pl",
+    "search_ad_page": "/search.pl",
+    "search_ad_call": "/searchDo.pl",
+    "search_ar_page": "/searchGeneInd.pl",
+    "search_ar_call": "/searchGeneIndDo.pl",
+    "search_sample_page": "/searchStat.pl",
     "search_sample_call": "/searchSampleDo.pl",
-    "gene_ind_call": "/searchGeneIndDo.pl",
 }
 
 EVADB_ADMIN_PAGES = {

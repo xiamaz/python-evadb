@@ -2,6 +2,7 @@ from loguru import logger
 
 from .evadb_shared import require_login, EvaDBBase, Response
 from .table_parser import extract_table, ParsingError
+from .csrf_parser import extract_csrf_tokens
 
 
 class EvaDBUser(EvaDBBase):
@@ -18,8 +19,28 @@ class EvaDBUser(EvaDBBase):
         session_id = self._session.cookies.get("Exome")
         return session_id
 
+    def _search_query(self, search_url, data, xpath, csrf_url=""):
+        """Generic search query with csrf getting."""
+        # get csrf for given call
+        if csrf_url:
+            csrf_text = self._session.get(csrf_url).text
+            csrf_tokens = extract_csrf_tokens(csrf_text)
+            data = {**data, **csrf_tokens}
+
+        logger.debug("Query ({}): {}", search_url, data)
+        text = self._post_form(search_url, data)
+
+        try:
+            table_data = extract_table(text, xpath)
+            logger.debug("Successfully extracted table with {}", xpath)
+        except ParsingError as e:
+            logger.error("Failed to parse query {} with xpath {}.", search_url, xpath)
+            return Response(str(e), None)
+
+        return Response(None, table_data)
+
     @require_login
-    def search(self, data: dict) -> Response:
+    def search_ad(self, data: dict) -> Response:
         """Search AD variants.
 
         Example data dict: {
@@ -49,36 +70,35 @@ class EvaDBUser(EvaDBBase):
         Returns:
             Response tuple consisting of error field and data field.
         """
-        logger.debug("Query: {}", data)
-        search_url = self._urls["search_call"]
-        text = self._post_form(search_url, data)
-
-        try:
-            table_data = extract_table(text, "//*[@id=\"default\"]")
-        except ParsingError as e:
-            return Response(str(e), None)
-
-        logger.debug("Found {} AD variants", len(table_data))
-        return Response(None, table_data)
+        # get csrf for given call
+        csrf_url = self._urls["search_ad_page"]
+        search_url = self._urls["search_ad_call"]
+        xpath = "//*[@id=\"results\"]"
+        result = self._search_query(
+            search_url=search_url,
+            data=data,
+            xpath=xpath,
+            csrf_url=csrf_url
+        )
+        return result
 
     @require_login
-    def search_gene_ind(self, data: dict) -> Response:
+    def search_ar(self, data: dict) -> Response:
         """Search AR variants.
 
         Example data dict: {
         }
         """
-        logger.debug("Query: {}", data)
-        gene_ind_url = self._urls["gene_ind_call"]
-        text = self._post_form(gene_ind_url, data)
-
-        try:
-            table_data = extract_table(text, "(//html:table)[2]")
-        except ParsingError as e:
-            return Response(str(e), None)
-
-        logger.debug("Found {} AR variants", len(table_data))
-        return Response(None, table_data)
+        csrf_url = self._urls["search_ar_page"]
+        search_url = self._urls["search_ar_call"]
+        xpath = "//*[@id=\"results\"]"
+        result = self._search_query(
+            search_url=search_url,
+            data=data,
+            xpath=xpath,
+            csrf_url=csrf_url
+        )
+        return result
 
     @require_login
     def search_sample(self, data) -> Response:
@@ -97,14 +117,13 @@ class EvaDBUser(EvaDBBase):
             "nottoseq":        "0"
         }
         """
-        logger.debug("Query: {}", data)
-        sample_url = self._urls["search_sample_call"]
-        text = self._post_form(sample_url, data)
-
-        try:
-            table_data = extract_table(text, "//*[@id=\"default\"]")
-        except ParsingError as e:
-            return Response(str(e), None)
-
-        logger.debug("Found {} samples", len(table_data))
-        return Response(None, table_data)
+        csrf_url = self._urls["search_sample_page"]
+        search_url = self._urls["search_sample_call"]
+        xpath = "//*[@id=\"default\"]"
+        result = self._search_query(
+            search_url=search_url,
+            data=data,
+            xpath=xpath,
+            csrf_url=csrf_url
+        )
+        return result
