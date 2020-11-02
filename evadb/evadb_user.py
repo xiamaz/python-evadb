@@ -5,6 +5,11 @@ from .table_parser import extract_table, ParsingError
 from .csrf_parser import extract_csrf_tokens
 
 
+SESSION_CHECK_NEEDLE = {
+    "search_sample_page": '<meta http-equiv="refresh" content="0; URL=login.pl">'
+}
+
+
 class EvaDBUser(EvaDBBase):
 
     def set_session(self, session_id) -> "EvaDBUser":
@@ -18,6 +23,22 @@ class EvaDBUser(EvaDBBase):
         """Get current session id."""
         session_id = self._session.cookies.get("Exome")
         return session_id
+
+    def check_session(self) -> bool:
+        """Test if the current session is still logged in."""
+        for page_key, needle in SESSION_CHECK_NEEDLE.items():
+            result = self._session.get(self._urls[page_key])
+            text = result.text
+
+            # stop if logged-out indicator found
+            if needle in text:
+                self.logged_in = False
+                break
+        else:
+            # logged in is true if all tests are normal
+            self.logged_in = True
+
+        return self.logged_in
 
     def _search_query(self, search_url, data, xpath, csrf_url=""):
         """Generic search query with csrf getting."""

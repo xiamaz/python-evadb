@@ -12,6 +12,10 @@ eva = EvaDBUser()
 eva.login("TestUser1", "TestUser1")
 # eva.login("admin", "admin_pw")
 
+print("Check we are logged-in")
+result = eva.check_session()
+assert result
+
 print("Searching normal AD variants")
 variants = eva.search_ad({
     "ds.iddisease":  "312",
