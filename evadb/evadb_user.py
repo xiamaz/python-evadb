@@ -87,6 +87,28 @@ class EvaDBUser(EvaDBBase):
         """Search AR variants.
 
         Example data dict: {
+            "dg.iddisease":  "312",
+            "ds.iddisease":  "",
+            "s.name":        "S0002",
+            "idproject":     "",
+            "x.alleles":     "2",
+            "v.idsnv":       "1",
+            "ncontrols":     "15",
+            "avhet":         "",
+            "aa_het":        "",
+            "kaviar":        "",
+            "affecteds":     "all",
+            "homozygous":    "0",
+            "trio":          "0",
+            "snvqual":       "",
+            "gtqual":        "30",
+            "mapqual":       "",
+            "nonsynpergene": "1000",
+            "length":        "",
+            "lengthmax":     "",
+            "class":         ["snp", "indel", "deletion"],
+            "function":      ["unknown", "missense", "nonsense", "stoploss", "splice", "frameshift", "indel"],
+            "printquery":    "no",
         }
         """
         csrf_url = self._urls["search_ar_page"]
