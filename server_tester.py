@@ -8,7 +8,18 @@ print(resp.json())
 
 resp = S.post(U + "/login", json={"user": "TestUser1", "password": "TestUser1"})
 
-resp = S.get(U + "/search", json={
+req = requests.Request("POST", url=U+"/legacy/samples", json={})
+
+p = S.prepare_request(req)
+S.send(p)
+c = list(S.cookies)[0]
+c.domain = ''
+c.secure = False
+S.cookies.set("session", "7c46b1fb-f98f-44d4-a3cf-1b5929f6d918")
+
+resp = S.post(U + "/legacy/samples", json={}, cookies={"just": "checkin"})
+
+resp = S.post(U + "/legacy/search-ar", json={
     "ds.iddisease":  "312",
     "s.pedigree":    "S0001",
     "idproject":     "1",
