@@ -60,6 +60,20 @@ class EvaDBUser(EvaDBBase):
 
         return Response(None, table_data)
 
+    def _search_page(self, search_url, params, xpath):
+        logger.debug("Get Page ({}): {}", search_url, params)
+        response = self._session.get(search_url, params=params)
+        text = response.text
+
+        try:
+            table_data = extract_table(text, xpath)
+            logger.debug("Successfully extracted table for get-request {} with {}", search_url, xpath)
+        except ParsingError as e:
+            logger.error("Failed to parse get {} with xpath {}.", search_url, xpath)
+            return Response(str(e), None)
+
+        return Response(None, table_data)
+
     @require_login
     def search_ad(self, data: dict) -> Response:
         """Search AD variants.
@@ -168,5 +182,16 @@ class EvaDBUser(EvaDBBase):
             data=data,
             xpath=xpath,
             csrf_url=csrf_url
+        )
+        return result
+
+    @require_login
+    def show_hpo(self, idsample) -> Response:
+        """Show list of HPO terms."""
+        page_url = self._urls["show_hpo_page"]
+        result = self._search_page(
+            page_url,
+            {"idsample": idsample},
+            "//*[@id=\"default\"]"
         )
         return result

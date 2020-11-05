@@ -7,6 +7,7 @@ resp = S.get(U)
 print(resp.json())
 
 resp = S.post(U + "/login", json={"user": "TestUser1", "password": "TestUser1"})
+resp = S.post(U + "/next/getPatient", json={"id": "205"})
 
 req = requests.Request("POST", url=U+"/legacy/samples", json={})
 

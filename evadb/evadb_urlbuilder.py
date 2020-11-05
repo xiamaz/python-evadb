@@ -10,6 +10,7 @@ EVADB_USER_PAGES = {
     "search_ar_call": "/searchGeneIndDo.pl",
     "search_sample_page": "/searchStat.pl",
     "search_sample_call": "/searchSampleDo.pl",
+    "show_hpo_page": "/showHPO.pl",
 }
 
 EVADB_ADMIN_PAGES = {

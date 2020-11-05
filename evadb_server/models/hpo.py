@@ -5,10 +5,15 @@ from dataclasses import dataclass
 HPO_REGEX = re.compile(r"^HP:(\d{7})$")
 
 
-@dataclass
-class HPOTerm(frozen=True, eq=True):
+class HPOTerm:
     """Represent a single HPO term."""
-    id: int
+
+    def __init__(self, hpo_id):
+        self._id = hpo_id
+
+    @property
+    def id(self):
+        return self._id
 
     @classmethod
     def from_string(cls, string):
@@ -22,3 +27,7 @@ class HPOTerm(frozen=True, eq=True):
     def __repr__(self):
         """Pad the HPO String to a 7 string number."""
         hpo_str = f"HP:{self.id:07}"
+        return hpo_str
+
+    def __eq__(self, other):
+        return str(self) == str(other)
