@@ -4,9 +4,6 @@ from dataclasses import dataclass
 from loguru import logger
 import requests
 
-from .constants import EVADB_DEFAULT_HOST, EVADB_DEFAULT_ADMIN_LOC, EVADB_DEFAULT_USER_LOC
-from .evadb_urlbuilder import build_evadb_urls
-
 from .csrf_parser import extract_csrf_tokens
 
 
@@ -44,12 +41,23 @@ def evadb_login(session: "Session", url: str, user: str, password: str, csrf: st
     return resp.ok and "Login successful" in resp.text
 
 
+def build_evadb_urls(host: str, pages: dict) -> dict:
+    """Build a dict of complete URLs with the given host.
+    """
+    urls = {k: host + v for k, v in pages.items()}
+    return urls
+
+
 class EvaDBBase:
+
+    pages = {
+        "login_page": "/login.pl",
+        "login_call": "/loginDo.pl",
+    }
+
     def __init__(
-            self,
-            host: str = EVADB_DEFAULT_HOST,
-            user_loc: str = EVADB_DEFAULT_USER_LOC,
-            admin_loc: str = EVADB_DEFAULT_ADMIN_LOC
+        self,
+        host: str,
     ):
         """
         Args:
@@ -57,7 +65,9 @@ class EvaDBBase:
         """
         self._session = requests.Session()
         self.logged_in = False
-        self._urls = build_evadb_urls(host, user_loc=user_loc, admin_loc=admin_loc)
+
+        # potentially merge with pages already existing in parent class
+        self._urls = build_evadb_urls(host, self.pages)
 
         self._session.headers["referer"] = self._urls["login_page"]
 

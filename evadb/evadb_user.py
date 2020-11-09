@@ -1,6 +1,7 @@
 from loguru import logger
 
 from .evadb_shared import require_login, EvaDBBase, Response
+from .constants import EVADB_USER_HOST
 from .table_parser import extract_table, ParsingError
 from .csrf_parser import extract_csrf_tokens
 
@@ -11,6 +12,21 @@ SESSION_CHECK_NEEDLE = {
 
 
 class EvaDBUser(EvaDBBase):
+
+    pages = {
+        "login_page": "/login.pl",
+        "login_call": "/loginDo.pl",
+        "search_ad_page": "/search.pl",
+        "search_ad_call": "/searchDo.pl",
+        "search_ar_page": "/searchGeneInd.pl",
+        "search_ar_call": "/searchGeneIndDo.pl",
+        "search_sample_page": "/searchStat.pl",
+        "search_sample_call": "/searchSampleDo.pl",
+        "show_hpo_page": "/showHPO.pl",
+    }
+
+    def __init__(self, host=EVADB_USER_HOST):
+        super().__init__(host)
 
     def set_session(self, session_id) -> "EvaDBUser":
         """Set a session id manually. This will set logged_in to true.

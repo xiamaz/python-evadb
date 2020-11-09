@@ -10,7 +10,7 @@ from marshmallow import fields
 
 
 def legacy_sample_to_sample(legacy_sample):
-    status_key = [k for k in legacy_sample if "0 nothing_done 1 solved" in k][0]
+    status_key = [k for k in legacy_sample if "Con- clusion" in k][0]
     status_value = legacy_sample[status_key]
 
     if status_value.startswith("0"):

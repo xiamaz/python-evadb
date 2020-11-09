@@ -1,3 +1,2 @@
-EVADB_DEFAULT_HOST = "https://ihg4.helmholtz-muenchen.de/cgi-bin/mysql"
-EVADB_DEFAULT_USER_LOC = "/snv-vcf"
-EVADB_DEFAULT_ADMIN_LOC = "/snv-vcf"
+EVADB_USER_HOST = "https://ihg4.helmholtz-muenchen.de/cgi-bin/mysql/snv-vcf"
+EVADB_ADMIN_HOST = "https://ihg4.helmholtz-muenchen.de/cgi-bin/mysql/snvedit"

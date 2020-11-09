@@ -25,7 +25,7 @@ def legacy_sample_to_patient(legacy_sample):
     return Patient(
         id=legacy_sample["Interal ID"],
         pedigree_id=legacy_sample["Pedigree"],
-        sex=Sex(legacy_sample["Sex"]),
+        sex=Sex(legacy_sample["Sex"] or "unknown"),
         affected=legacy_sample["Affected"] == "1",
         disease=legacy_sample["Disease"],
         symptoms=[],

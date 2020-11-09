@@ -4,6 +4,9 @@ from flask_cors import CORS
 from .routes import legacy, next, session
 
 
+session.CUSTOM_HOST = "https://evadb.meb.uni-bonn.de/cgi-bin"
+
+
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 

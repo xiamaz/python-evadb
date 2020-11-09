@@ -7,6 +7,8 @@ import evadb
 from evadb_server.models.sessionmanager import SessionManager
 from .base import jsonrpc
 
+CUSTOM_HOST = evadb.constants.EVADB_USER_HOST
+
 sessions = SessionManager()
 SESSION_COOKIE = "session"
 
@@ -46,7 +48,7 @@ def login(data):
     # generate a new session cookie
     session_cookie = sessions.generate_session_id()
 
-    eva_inst = evadb.EvaDBUser().login(user=data["user"], password=data["password"])
+    eva_inst = evadb.EvaDBUser(CUSTOM_HOST).login(user=data["user"], password=data["password"])
 
     if eva_inst.logged_in:
         sessions.add(session_cookie, eva_inst)

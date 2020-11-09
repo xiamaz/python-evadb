@@ -1,6 +1,3 @@
-EVADB_SHARED_PAGES = {
-}
-
 EVADB_USER_PAGES = {
     "login_page": "/login.pl",
     "login_call": "/loginDo.pl",
@@ -17,14 +14,9 @@ EVADB_ADMIN_PAGES = {
 }
 
 
-def build_evadb_urls(host, user_loc="", admin_loc=""):
-    """Generate correct evadb page urls based on whether both user and admin
-    components follow the canonical folder structure or the revised structure
-    in the dockerized version.
-    """
+def build_evadb_urls(user_host, admin_host):
     urls = {
-        **{k: host + v for k, v in EVADB_SHARED_PAGES.items()},
-        **{k: host + user_loc + v for k, v in EVADB_USER_PAGES.items()},
-        **{k: host + admin_loc + v for k, v in EVADB_ADMIN_PAGES.items()},
+        **{k: user_host + v for k, v in EVADB_USER_PAGES.items()},
+        **{k: admin_host + v for k, v in EVADB_ADMIN_PAGES.items()},
     }
     return urls
