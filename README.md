@@ -9,6 +9,9 @@ Install all python packages in `requirements.txt`. Python 3.8 is required.
 
 Install package locally with `pip install -e .`.
 
+Additionally a local installation of redis and rabbitmq are needed for the
+`evadb-server`
+
 ## Examples
 
 `example_calls_user.py` and `example_calls_admin.py` are small scripts that
