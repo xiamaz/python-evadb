@@ -6,8 +6,9 @@ import evadb
 
 from evadb_server.models.sessionmanager import SessionManager
 from .base import jsonrpc
+from .. import config
 
-CUSTOM_HOST = evadb.constants.EVADB_USER_HOST
+CUSTOM_HOST = config.CUSTOM_HOST or evadb.constants.EVADB_USER_HOST
 
 sessions = SessionManager()
 SESSION_COOKIE = "session"
@@ -16,12 +17,16 @@ SESSION_COOKIE = "session"
 app = Blueprint("login", __name__)
 
 
+def get_session_id():
+    session_id = request.cookies.get(SESSION_COOKIE)
+    return session_id
+
+
 def has_session(fn):
     @wraps(fn)
     def inner(*args, **kwargs):
-        print(request.cookies)
-        session_cookie = request.cookies.get(SESSION_COOKIE)
-        session = sessions.get(session_cookie)
+        session_id = get_session_id()
+        session = sessions.get(session_id)
         if session is None:
             return {"error": "Failed to get session", "data": None}
         return fn(session, *args, **kwargs)

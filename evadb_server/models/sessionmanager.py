@@ -1,4 +1,4 @@
-import uuid
+from ..helper import generate_unique_id
 
 from loguru import logger
 
@@ -32,4 +32,4 @@ class SessionManager:
     @staticmethod
     def generate_session_id() -> str:
         """Generate a session id."""
-        return str(uuid.uuid4())
+        return generate_unique_id()

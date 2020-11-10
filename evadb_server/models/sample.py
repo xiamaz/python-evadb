@@ -32,8 +32,10 @@ def legacy_sample_to_sample(legacy_sample):
     else:
         tissue = TissueType.UNKNOWN
 
+    sample_id = legacy_sample["ID Links"].replace(u'\xa0', u' ').split()[0]
+
     return Sample(
-        id=legacy_sample["Interal ID"],
+        id=sample_id,
         foreign_id=legacy_sample["Foreign ID"],
         external_seq_id=legacy_sample["External SeqID"],
         patient_id=legacy_sample["Interal ID"],

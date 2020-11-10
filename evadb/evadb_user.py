@@ -121,7 +121,8 @@ class EvaDBUser(EvaDBBase):
         Returns:
             Response tuple consisting of error field and data field.
         """
-        # get csrf for given call
+        data["showall"] = "1"
+
         csrf_url = self._urls["search_ad_page"]
         search_url = self._urls["search_ad_call"]
         xpath = "//*[@id=\"results\"]"
@@ -162,6 +163,8 @@ class EvaDBUser(EvaDBBase):
             "printquery":    "no",
         }
         """
+        data["showall"] = "1"
+
         csrf_url = self._urls["search_ar_page"]
         search_url = self._urls["search_ar_call"]
         xpath = "//*[@id=\"results\"]"
