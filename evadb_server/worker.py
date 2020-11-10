@@ -72,4 +72,3 @@ def runQuery(user_id, query_id, query_data, session_id):
         results.append(result)
 
     R.set(f"{query_id}-result", json.dumps(results))
-    print(results)
